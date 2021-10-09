@@ -10,14 +10,17 @@
     </parent>
 
     <groupId>de.cadentem</groupId>
-    <artifactId>SomeAPI</artifactId>
+    <artifactId>some-api</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
+    <name>some-api</name>
+
     <properties>
-        <maven.compiler.source>15</maven.compiler.source>
-        <maven.compiler.target>15</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <spring-version>2.5.5</spring-version>
+        <start-class>de.cadentem.application.Application</start-class>
     </properties>
 
     <dependencies>
@@ -31,6 +34,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-hateoas</artifactId>
             <version>${spring-version}</version>
+        </dependency>
+        <!-- Tomcat -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <version>${spring-version}</version>
+            <scope>provided</scope>
         </dependency>
         <!-- Quality of life -->
         <dependency>
@@ -46,4 +56,14 @@
             <scope>runtime</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-version}</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>
