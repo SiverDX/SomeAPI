@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('test') {
             steps {
-                sh 'curl get -v localhost:8080/orders'
+                sh 'curl get -v localhost:8081/orders'
             }
         }
     }
