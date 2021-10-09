@@ -17,7 +17,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-public class ArtistController {
+public class ArtistController implements IController<Artist> {
     private final ArtistRepository repository;
     private final ArtistModelAssembler assembler;
 
@@ -26,7 +26,7 @@ public class ArtistController {
         this.assembler = assembler;
     }
 
-    @GetMapping("/artists")
+    @GetMapping("/" + Artist.BASE)
     public CollectionModel<EntityModel<Artist>> all() {
         List<EntityModel<Artist>> artists = repository
                 .findAll()
@@ -37,21 +37,21 @@ public class ArtistController {
         return CollectionModel.of(artists, linkTo(methodOn(ArtistController.class).all()).withSelfRel());
     }
 
-    @GetMapping("artists/{id}")
+    @GetMapping("/" + Artist.BASE + "/{id}")
     public EntityModel<Artist> one(@PathVariable final Long id) throws ArtistNotFoundException {
         Artist artist = repository.findById(id).orElseThrow(() -> new ArtistNotFoundException(id));
 
         return assembler.toModel(artist);
     }
 
-    @PostMapping("/artists")
+    @PostMapping("/" + Artist.BASE)
     public ResponseEntity<EntityModel<Artist>> newArtist(@RequestBody final Artist newArtist) {
         EntityModel<Artist> artist = assembler.toModel(repository.save(newArtist));
 
         return ResponseEntity.created(artist.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(artist);
     }
 
-    @PutMapping("/artists/{id}")
+    @PutMapping("/" + Artist.BASE + "/{id}")
     public ResponseEntity<EntityModel<Artist>> replaceArtist(@RequestBody final Artist newArtist, @PathVariable final Long id) {
         Artist updatedArtist = repository.findById(id).map(artist -> {
             artist.setName(artist.getName());
@@ -69,7 +69,7 @@ public class ArtistController {
         return ResponseEntity.created(artistModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(artistModel);
     }
 
-    @DeleteMapping("/artists/{id}")
+    @DeleteMapping("/" + Artist.BASE + "/{id}")
     public ResponseEntity<?> deleteArtist(@PathVariable final Long id) {
         repository.deleteById(id);
 

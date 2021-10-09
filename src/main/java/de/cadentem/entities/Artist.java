@@ -1,6 +1,7 @@
 package de.cadentem.entities;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
@@ -11,7 +12,10 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-public class Artist {
+@NoArgsConstructor
+public class Artist implements IEntity {
+    public static final String BASE = "artists";
+
     @Id
     @GeneratedValue
     private Long id;
@@ -19,12 +23,13 @@ public class Artist {
     private String name;
     private LocalDateTime birthYear;
 
-    public Artist() {
-    }
-
     public Artist(final String name, final LocalDateTime birthYear) {
         this.name = name;
         this.birthYear = birthYear;
+    }
+
+    public String getBase() {
+        return Artist.BASE;
     }
 
     @Override

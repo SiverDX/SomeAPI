@@ -6,15 +6,10 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @Component
-public class ArtistModelAssembler implements RepresentationModelAssembler<Artist, EntityModel<Artist>> {
+public class ArtistModelAssembler extends GenericModelAssembler<Artist> implements RepresentationModelAssembler<Artist, EntityModel<Artist>> {
     @Override
     public EntityModel<Artist> toModel(final Artist artist) {
-        return EntityModel.of(artist,
-                linkTo(methodOn(ArtistController.class).one(artist.getId())).withSelfRel(),
-                linkTo(methodOn(ArtistController.class).all()).withRel("artists"));
+        return toModel(ArtistController.class, artist);
     }
 }

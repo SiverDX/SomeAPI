@@ -21,7 +21,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-public class OrderController {
+public class OrderController implements IController<Order> {
     private final OrderRepository repository;
     private final OrderModelAssembler assembler;
 
@@ -30,7 +30,7 @@ public class OrderController {
         this.assembler = assembler;
     }
 
-    @GetMapping("/orders")
+    @GetMapping("/" + Order.BASE)
     public CollectionModel<EntityModel<Order>> all() {
         List<EntityModel<Order>> order = repository.findAll()
                 .stream()
@@ -40,14 +40,14 @@ public class OrderController {
         return CollectionModel.of(order, linkTo(methodOn(OrderController.class).all()).withSelfRel());
     }
 
-    @GetMapping("/orders/{id}")
+    @GetMapping("/" + Order.BASE + "/{id}")
     public EntityModel<Order> one(@PathVariable final Long id) throws OrderNotFoundException {
         Order order = repository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
 
         return assembler.toModel(order);
     }
 
-    @PostMapping("/orders")
+    @PostMapping("/" + Order.BASE)
     public ResponseEntity<EntityModel<Order>> newOrder(@RequestBody final Order order) {
         order.setStatus(Status.IN_PROGRESS);
 
@@ -56,7 +56,7 @@ public class OrderController {
         return ResponseEntity.created(linkTo(methodOn(OrderController.class).one(newOrder.getId())).toUri()).body(assembler.toModel(newOrder));
     }
 
-    @PutMapping("/orders/{id}/complete")
+    @PutMapping("/" + Order.BASE + "/{id}/complete")
     public ResponseEntity<?> complete(@PathVariable final Long id) {
         Order order = repository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
 
@@ -71,7 +71,7 @@ public class OrderController {
                 .body(Problem.create().withTitle("Method not allowed").withDetail("You cannot complete an order that is in the " + order.getStatus() + " status"));
     }
 
-    @DeleteMapping("/orders/{id}/cancel")
+    @DeleteMapping("/" + Order.BASE + "/{id}/cancel")
     public ResponseEntity<?> cancel(@PathVariable Long id) {
         Order order = repository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
 
