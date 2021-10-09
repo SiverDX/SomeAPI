@@ -13,3 +13,4 @@ LABEL maintainer="https://github.com/SiverDX"
 
 COPY --from=builder /home/SomeAPI/target/SomeAPI*.war /usr/local/tomcat/webapps
 
+EXPOSE 8081
