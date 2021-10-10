@@ -6,13 +6,11 @@ The application is set up to run as .war on a tomcat - you can run it with an em
 So if your application does not start even if everything else is supposedly correctly set up - this might be the problem
 
 ## Set Up
-Build a Docker image based on the project `Dockerfile`
-
-Execute the following command to build an image:
+Build a Docker image based on the project `Dockerfile` by execute the following command:
 
 `docker build .`
 
-To tag it first use `docker images` to get the `IMAGE ID`
+To tag it we need the id: `docker images` to get the `IMAGE ID`
 
 Then use this command to tag it:
 
@@ -21,6 +19,8 @@ Then use this command to tag it:
 You can also just do this:
 
 `docker build . -t <repository>/<image>:<version>`
+
+The repository is mainly used to later push it to DockerHub - you can run the image even without tagging it, you just need the id
 
 ### Example:
 **Assumption**: `IMAGE ID` is `28ff55432f65`
@@ -34,9 +34,11 @@ Start a Docker container with the built image
 
 **Also**: You can bind the port of the machine that is running the container to the container port (`-p <host-port>:<container-port>`)
 
-`docker run -p 1234:8080/tcp <image>`
+`docker run -p 1234:8080 <image>`
 
 This allows you to access the application with `localhost:1234`
+
+If you do not want to specify a port you can also expose all of them using `-P` (no port required)
 
 Once the container is running you can check the ports with `docker ps`
 
@@ -83,7 +85,68 @@ All of these changes are temporary and will be lost once the container is stoppe
 ### Other
 ...
 
+# Helm
+...
+
+# Jenkins
+## Run Locally
+Start the jenkins with a persistent storage and the latest image
+
+(persistent storage = directory on your local machine; without this the configuration will be lost once the container is stopped)
+
+`docker run -v jenkins_home:/var/jenkins_home -p 8080:8080 -p 50000:50000 jenkins/jenkins:lts`
+
+(`lts` means long term support)
+
+## Run in Kubernetes
+**Required**: You need to have helm installed in your Kubernetes Cluster
+
+`helm install jenkins stable/jenkins`
+
+Set the Jenkins URL in 'Manage Jenkins' -> 'Configure System'
+
+Check `kubectl get pods` to get the ip - though it would be better to have a `Service` at this point
+
+## Configuration
+Install plugins in 'Manage Jenkins' -> 'Manage Plugins '-> 'Available'
+
+### User Management
+Install this plugin: `Matrix Authorization Strategy`
+
+Manage 'Jenkins' -> 'Configure Global Security' -> In 'Security Realm' activate:
+* Jenkins' own user database
+* Allow users to sign up
+* Matrix-based security
+
+Create new users with 'Add user or group...' and set permissions
+
+After that the users have to be created in the login page with 'create an account'
+
+### Maven
+In 'Manage Jenkins' -> 'Global Tool Configuration' search for 'Maven'
+
+There you will have to add a Maven installation via 'Add Maven'
+
+### Create a new Job
+'New Item' -> 'Freestyle project'
+
+### Git Repository Authorization
+execute `ssh-keygen` and copy the content of `id_rsa.pub`
+
+For GitHub you will have to place this in your Profile under 'SSH and GPG Keys'
+
+In Jenkins you set the private: 'New Item' -> 'Source Code Management' -> check 'Git'
+
+After that add via 'Add' -> 'SSH Username with private key' the content of `id_rsa`
+
 # Kubernetes
 Connect to a pod, creating an interactive shell:
 
 `kubectl exec -n <namespace> -it <pod> -- /bin/bash`
+
+# Interact with the application
+### Important 
+If you have problems reaching your application think about the root context - it could be set to the name of the .war file
+
+You can change the name of the .war file by using `<finalName/>` in the spring-boot plugin
+
