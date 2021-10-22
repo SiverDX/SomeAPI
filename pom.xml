@@ -12,35 +12,26 @@
     <groupId>de.cadentem</groupId>
     <artifactId>some-api</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
-
-    <name>some-api</name>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <spring-version>2.5.5</spring-version>
-        <start-class>de.cadentem.application.Application</start-class>
     </properties>
 
     <dependencies>
+        <!-- TODO :: validation -->
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>${spring-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-hateoas</artifactId>
-            <version>${spring-version}</version>
+            <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
-        <!-- Tomcat -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <version>${spring-version}</version>
-            <scope>provided</scope>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
         <!-- Quality of life -->
         <dependency>
@@ -62,10 +53,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-version}</version>
-                <configuration>
-                    <finalName>some-api</finalName>
-                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
