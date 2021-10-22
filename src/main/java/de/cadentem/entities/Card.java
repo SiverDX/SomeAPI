@@ -13,9 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @NoArgsConstructor
-public class Artist implements IEntity {
-    public static final String BASE = "artists";
-
+public class Card {
     @Id
     @GeneratedValue
     private Long id;
@@ -23,21 +21,8 @@ public class Artist implements IEntity {
     private String name;
     private LocalDateTime birthYear;
 
-    public Artist(final String name, final LocalDateTime birthYear) {
+    public Card(final String name, final LocalDateTime birthYear) {
         this.name = name;
         this.birthYear = birthYear;
-    }
-
-    public String getBase() {
-        return Artist.BASE;
-    }
-
-    @Override
-    public String toString() {
-        return "Artist{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", birthYear=" + birthYear +
-                '}';
     }
 }

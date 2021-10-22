@@ -1,6 +1,6 @@
 package de.cadentem.advice;
 
-import de.cadentem.exceptions.OrderNotFoundException;
+import de.cadentem.exceptions.CardNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class OrderNotFoundAdvice {
+public class CardNotFoundAdvice {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(OrderNotFoundException.class)
-    public String orderNotFoundHandler(final OrderNotFoundException exception) {
+    @ExceptionHandler(CardNotFoundException.class)
+    public String cardNotFoundHandler(final CardNotFoundException exception) {
         return exception.getMessage();
     }
 }
