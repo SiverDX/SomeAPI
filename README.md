@@ -1,3 +1,5 @@
+Description below not really up to date (it's not set up to run as .war e. g.)
+
 # Docker / Kubernets Playground Project
 The application is set up to run as .war on a tomcat - you can run it with an embedded tomcat as well though
 
