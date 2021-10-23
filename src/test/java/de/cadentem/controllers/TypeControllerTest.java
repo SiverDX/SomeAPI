@@ -9,14 +9,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -36,7 +37,7 @@ public class TypeControllerTest {
 
     @BeforeEach
     public void setUp() {
-        when(typeController.getTypes()).thenReturn(createResponse());
+//        when(typeController.getTypes()).thenReturn(createResponse());
     }
 
     @Test
@@ -44,9 +45,11 @@ public class TypeControllerTest {
         this.mockMvc.perform(get("/types"))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(content().json(createBody(ids, values).toString()));
+
+        verify(typeController).getTypes();
     }
 
-    private ResponseEntity<List<Type>> createResponse() {
+    private CollectionModel<ResponseEntity<EntityModel<Type>>> createResponse() {
         assert ids.length == values.length;
 
         List<Type> types = new ArrayList<>();
@@ -58,7 +61,9 @@ public class TypeControllerTest {
             types.add(type);
         }
 
-        return new ResponseEntity<>(types, HttpStatus.OK);
+
+//        return ResponseEntity.ok();
+        return null;
     }
 
     private JSONArray createBody(final int[] ids, final String[] values) throws JSONException {
