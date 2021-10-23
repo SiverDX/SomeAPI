@@ -8,6 +8,7 @@ import de.cadentem.repositories.TypeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +20,22 @@ public class TypeService {
     private final SubTypeRepository subTypeRepository;
     private final TypeRepository typeRepository;
 
-    public Optional<?> findByValue(final String value, final ValueType valueType) {
+    public Optional<?> findById(final long id, final ValueType valueType) {
+        switch (valueType) {
+            case RARITY:
+                return rarityRepository.findById(id);
+            case TYPE:
+                return typeRepository.findById(id);
+            case SUBTYPE:
+                return subTypeRepository.findById(id);
+            case SUPERTYPE:
+                return superTypeRepository.findById(id);
+        }
+
+        return Optional.empty();
+    }
+
+    public List<?> findByValue(final String value, final ValueType valueType) {
         switch (valueType) {
             case RARITY:
                 return rarityRepository.findByValue(value);
@@ -31,7 +47,8 @@ public class TypeService {
                 return superTypeRepository.findByValue(value);
         }
 
-        return Optional.empty();
+        // todo :: return null / throw exception?
+        return new ArrayList<>();
     }
 
     public List<?> findAll(final ValueType valueType) {
