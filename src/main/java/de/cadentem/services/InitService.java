@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 @Service
 @AllArgsConstructor
 public class InitService {
+    // todo :: only one entity with two fields - value and type?
     private static final Logger LOG = LoggerFactory.getLogger(InitService.class);
 
     private final RarityRepository rarityRepository;
@@ -77,7 +78,14 @@ public class InitService {
         try {
             ValueEntity instance = entity.getDeclaredConstructor(String.class).newInstance(value);
 
-            repository.save(instance);
+            ValueEntity savedEntity = (ValueEntity) repository.save(instance);
+
+            // fixme :: ids are not separate between the value types
+            LOG.info(
+                    "ID: " + savedEntity.getId() + " | Value: " + savedEntity.getValue()
+                    + " | Type: " + entity + " | Repository: " + repository.getClass()
+            );
+
         } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException | InstantiationException e) {
             LOG.error("Could not save entity", e);
         }

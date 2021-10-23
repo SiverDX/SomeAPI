@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class CardController {
     private final CardService service;
@@ -21,10 +23,10 @@ public class CardController {
 //    }
 
     @GetMapping
-    public ResponseEntity<Iterable<Card>> getAll() {
-        Iterable<Card> artists = service.getAll();
+    public ResponseEntity<List<Card>> getAll() {
+        List<Card> cards = service.getAll();
 
-        return ResponseEntity.ok(artists);
+        return ResponseEntity.ok(cards);
     }
 
     @GetMapping("/{id}")
