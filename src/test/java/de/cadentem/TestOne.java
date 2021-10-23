@@ -1,4 +1,4 @@
-package test.de.cadentem;
+package de.cadentem;
 
 import de.cadentem.controllers.CardController;
 import de.cadentem.entities.Card;

@@ -29,8 +29,4 @@ public class ServiceConfiguration {
             service.initTypes();
         };
     }
-//
-//    private void logInfo(final JpaRepository<?, ?>... repositories) {
-//        Arrays.stream(repositories).forEach(repository -> repository.findAll().forEach(entity -> LOG.info("Preloaded " + entity)));
-//    }
 }
