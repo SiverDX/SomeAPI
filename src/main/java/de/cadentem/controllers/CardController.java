@@ -10,17 +10,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/cards")
 public class CardController {
     private final CardService service;
 
     public CardController(final CardService service) {
         this.service = service;
     }
-
-//    @GetMapping
-//    public Page<Artist> all(final Pageable pageable) {
-//        return service.getAll(pageable);
-//    }
 
     @GetMapping
     public ResponseEntity<List<Card>> getAll() {

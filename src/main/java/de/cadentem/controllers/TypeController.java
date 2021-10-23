@@ -30,17 +30,15 @@ public class TypeController {
     private final SuperTypeAssembler superTypeAssembler;
     private final TypeAssembler typeAssembler;
 
-    @GetMapping(value = "/subtypes", params = "value")
+    @GetMapping(value = "/subtypes")
     @SuppressWarnings("unchecked")
-    public ResponseEntity<CollectionModel<EntityModel<SubType>>> getSubTypes(
-            @RequestParam(required = false) final String value
-    ) {
+    public ResponseEntity<CollectionModel<EntityModel<SubType>>> getSubTypes(@RequestParam final Optional<String> value) {
         List<SubType> entities;
 
-        if (value == null || value.isEmpty()) {
-            entities = (List<SubType>) typeService.findAll(ValueType.SUBTYPE);
+        if (value.isPresent()) {
+            entities = (List<SubType>) typeService.findByValue(value.get(), ValueType.SUBTYPE);
         } else {
-            entities = (List<SubType>) typeService.findByValue(value, ValueType.SUBTYPE);
+            entities = (List<SubType>) typeService.findAll(ValueType.SUBTYPE);
         }
 
         return ResponseEntity.ok(subTypeAssembler.toCollectionModel(entities));
@@ -55,17 +53,15 @@ public class TypeController {
         return ResponseEntity.ok(subTypeAssembler.toModel(entity));
     }
 
-    @GetMapping(value = "/supertypes", params = "value")
+    @GetMapping(value = "/supertypes")
     @SuppressWarnings("unchecked")
-    public ResponseEntity<CollectionModel<EntityModel<SuperType>>> getSuperTypes(
-            @RequestParam(required = false) final String value
-    ) {
+    public ResponseEntity<CollectionModel<EntityModel<SuperType>>> getSuperTypes(@RequestParam final Optional<String> value) {
         List<SuperType> entities;
 
-        if (value == null || value.isEmpty()) {
-            entities = (List<SuperType>) typeService.findAll(ValueType.SUPERTYPE);
+        if (value.isPresent()) {
+            entities = (List<SuperType>) typeService.findByValue(value.get(), ValueType.SUPERTYPE);
         } else {
-            entities = (List<SuperType>) typeService.findByValue(value, ValueType.SUPERTYPE);
+            entities = (List<SuperType>) typeService.findAll(ValueType.SUPERTYPE);
         }
 
         return ResponseEntity.ok(superTypeAssembler.toCollectionModel(entities));
@@ -80,17 +76,15 @@ public class TypeController {
         return ResponseEntity.ok(superTypeAssembler.toModel(entity));
     }
 
-    @GetMapping(value = "/rarities", params = "value")
+    @GetMapping(value = "/rarities")
     @SuppressWarnings("unchecked")
-    public ResponseEntity<CollectionModel<EntityModel<Rarity>>> getRarities(
-            @RequestParam(required = false) final String value
-    ) {
+    public ResponseEntity<CollectionModel<EntityModel<Rarity>>> getRarities(@RequestParam final Optional<String> value) {
         List<Rarity> entities;
 
-        if (value == null || value.isEmpty()) {
-            entities = (List<Rarity>) typeService.findAll(ValueType.RARITY);
+        if (value.isPresent()) {
+            entities = (List<Rarity>) typeService.findByValue(value.get(), ValueType.RARITY);
         } else {
-            entities = (List<Rarity>) typeService.findByValue(value, ValueType.RARITY);
+            entities = (List<Rarity>) typeService.findAll(ValueType.RARITY);
         }
 
         return ResponseEntity.ok(rarityAssembler.toCollectionModel(entities));
@@ -105,17 +99,15 @@ public class TypeController {
         return ResponseEntity.ok(rarityAssembler.toModel(entity));
     }
 
-    @GetMapping(value = "/types", params = "value")
+    @GetMapping(value = "/types")
     @SuppressWarnings("unchecked")
-    public ResponseEntity<CollectionModel<EntityModel<Type>>> getTypes(
-            @RequestParam(required = false) final String value
-    ) {
+    public ResponseEntity<CollectionModel<EntityModel<Type>>> getTypes(@RequestParam final Optional<String> value) {
         List<Type> entities;
 
-        if (value == null || value.isEmpty()) {
-            entities = (List<Type>) typeService.findAll(ValueType.TYPE);
+        if (value.isPresent()) {
+            entities = (List<Type>) typeService.findByValue(value.get(), ValueType.TYPE);
         } else {
-            entities = (List<Type>) typeService.findByValue(value, ValueType.TYPE);
+            entities = (List<Type>) typeService.findAll(ValueType.TYPE);
         }
 
         return ResponseEntity.ok(typeAssembler.toCollectionModel(entities));
