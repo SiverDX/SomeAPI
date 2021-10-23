@@ -16,13 +16,11 @@ import java.time.LocalDateTime;
 public class Card {
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
 
     private String name;
-    private LocalDateTime birthYear;
 
-    public Card(final String name, final LocalDateTime birthYear) {
+    public Card(final String name) {
         this.name = name;
-        this.birthYear = birthYear;
     }
 }

@@ -15,7 +15,7 @@ import javax.persistence.Id;
 public class Rarity implements ValueEntity {
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
 
     private String value;
 
