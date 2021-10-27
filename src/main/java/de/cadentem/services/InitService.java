@@ -87,7 +87,7 @@ public class InitService {
             );
 
         } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException | InstantiationException e) {
-            LOG.error("Could not save entity", e);
+            LOG.warn("Could not save entity", e);
         }
     }
 }

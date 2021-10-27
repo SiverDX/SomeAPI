@@ -5,17 +5,17 @@ import de.cadentem.assemblers.SubTypeAssembler;
 import de.cadentem.assemblers.SuperTypeAssembler;
 import de.cadentem.assemblers.TypeAssembler;
 import de.cadentem.entities.*;
+import de.cadentem.exceptions.WrongParameterException;
 import de.cadentem.services.TypeService;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -55,7 +55,7 @@ public class TypeController {
 
     @GetMapping(value = "/supertypes")
     @SuppressWarnings("unchecked")
-    public ResponseEntity<CollectionModel<EntityModel<SuperType>>> getSuperTypes(@RequestParam final Optional<String> value) {
+    public ResponseEntity<CollectionModel<EntityModel<SuperType>>> getSuperTypes(@RequestParam @Validated final Optional<String> value) {
         List<SuperType> entities;
 
         if (value.isPresent()) {
@@ -78,13 +78,19 @@ public class TypeController {
 
     @GetMapping(value = "/rarities")
     @SuppressWarnings("unchecked")
-    public ResponseEntity<CollectionModel<EntityModel<Rarity>>> getRarities(@RequestParam final Optional<String> value) {
+    public ResponseEntity<CollectionModel<EntityModel<Rarity>>> getRarities(
+            @RequestParam final Map<String, String> parameters
+    ) {
         List<Rarity> entities;
 
-        if (value.isPresent()) {
-            entities = (List<Rarity>) typeService.findByValue(value.get(), ValueType.RARITY);
-        } else {
+        if (parameters.size() > 0 && parameters.get("value") == null) {
+            throw new WrongParameterException("value");
+        }
+
+        if (parameters.get("value") == null) {
             entities = (List<Rarity>) typeService.findAll(ValueType.RARITY);
+        } else {
+            entities = (List<Rarity>) typeService.findByValue(parameters.get("value"), ValueType.RARITY);
         }
 
         return ResponseEntity.ok(rarityAssembler.toCollectionModel(entities));
@@ -120,6 +126,11 @@ public class TypeController {
         Type entity = optional.orElseThrow(() -> new NoSuchElementException("nope"));
 
         return ResponseEntity.ok(typeAssembler.toModel(entity));
+    }
+
+    @ExceptionHandler(WrongParameterException.class)
+    public ResponseEntity<?> handleWrongParameter() {
+        return ResponseEntity.badRequest().build();
     }
 }
 
