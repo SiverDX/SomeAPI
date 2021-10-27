@@ -6,6 +6,7 @@ import de.cadentem.repositories.SubTypeRepository;
 import de.cadentem.repositories.SupertypeRepository;
 import de.cadentem.repositories.TypeRepository;
 import de.cadentem.services.InitService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,6 +23,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Disabled
 @SpringBootTest
 @AutoConfigureMockMvc
 public class DemoTest {

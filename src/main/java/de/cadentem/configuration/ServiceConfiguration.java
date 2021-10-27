@@ -18,12 +18,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class ServiceConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceConfiguration.class);
 
-    private final PasswordEncoder encoder;
-
-    public ServiceConfiguration(final PasswordEncoder encoder) {
-        this.encoder = encoder;
-    }
-
     @Bean
     public WebClient webClient() {
         return WebClient.builder()
@@ -42,22 +36,5 @@ public class ServiceConfiguration {
 
             LOG.info("Finished initialization");
         };
-    }
-
-    @Bean
-    protected UserDetailsService userDetailsService() {
-        UserDetails user = User.builder()
-                .username("admin")
-                .password(encoder.encode("password"))
-                .authorities(SecurityRole.ADMIN.getGrantedAuthorities())
-                .build();
-
-        UserDetails dummy = User.builder()
-                .username("consumer")
-                .password(encoder.encode("123"))
-                .authorities(SecurityRole.CONSUMER.getGrantedAuthorities())
-                .build();
-
-        return new InMemoryUserDetailsManager(user, dummy);
     }
 }

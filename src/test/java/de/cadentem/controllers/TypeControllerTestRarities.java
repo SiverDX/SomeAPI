@@ -1,9 +1,9 @@
 package de.cadentem.controllers;
 
-import de.cadentem.configuration.TestConfiguration;
-import de.cadentem.entities.Rarity;
+import de.cadentem.configuration.TestTypeConfiguration;
 import de.cadentem.repositories.RarityRepository;
 import de.cadentem.services.TypeService;
+import de.cadentem.utils.EntityCreator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
@@ -16,10 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -27,9 +23,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import({TestConfiguration.class, TypeService.class})
+@Import({TestTypeConfiguration.class, TypeService.class})
 @WebMvcTest(controllers = TypeController.class)
-public class TypeControllerRaritiesTest {
+public class TypeControllerTestRarities {
 
     @Autowired
     private RarityRepository rarityRepository;
@@ -41,7 +37,7 @@ public class TypeControllerRaritiesTest {
     @ParameterizedTest
     @ValueSource(strings = {"someRarity", "#ä049gji4", "_~~~|", "   ", "\t", "\n"})
     public void test_get_200_findByValue(final String value) throws Exception {
-        when(rarityRepository.findByValue(value)).thenReturn(createRarities(value));
+        when(rarityRepository.findByValue(value)).thenReturn(EntityCreator.createRarities(value));
 
         ResultActions response = mockMvc.perform(MockMvcRequestBuilders
                         .get("/rarities")
@@ -89,7 +85,7 @@ public class TypeControllerRaritiesTest {
     public void test_get_200_findAll() throws Exception {
         int amount = 10;
 
-        when(rarityRepository.findAll()).thenReturn(createRarities(amount));
+        when(rarityRepository.findAll()).thenReturn(EntityCreator.createRarities(amount));
 
         ResultActions response = mockMvc.perform(MockMvcRequestBuilders
                         .get("/rarities"))
@@ -100,35 +96,4 @@ public class TypeControllerRaritiesTest {
         response.andExpect(status().isOk());
         response.andExpect(jsonPath("$._embedded.rarities", hasSize(amount)));
     }
-
-    private List<Rarity> createRarities(int amount) {
-        List<Rarity> rarities = new ArrayList<>();
-
-        for (int i = 0; i < amount; i++) {
-            Rarity rarity = createRarity(i, UUID.randomUUID().toString());
-            rarities.add(rarity);
-        }
-
-        return rarities;
-    }
-
-    private List<Rarity> createRarities(final String value) {
-        Rarity rarity = createRarity(0, value);
-
-        List<Rarity> rarities = new ArrayList<>();
-        rarities.add(rarity);
-
-        return rarities;
-    }
-
-    private Rarity createRarity(final long id, final String value) {
-        // todo :: set random values if empty? some other way to do this?
-        Rarity rarity = new Rarity();
-        rarity.setId(id);
-        rarity.setValue(value);
-
-        return rarity;
-    }
-
-
 }
